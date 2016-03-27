@@ -1,0 +1,130 @@
+{
+  "stop-schedule": {
+    "stop": {
+      "key": 60488,
+      "name": "Eastbound Roblin at Varsity View",
+      "number": 60488,
+      "direction": "Eastbound",
+      "side": "Nearside",
+      "street": {
+        "key": 3091,
+        "name": "Roblin Boulevard",
+        "type": "Boulevard"
+      },
+      "cross-street": {
+        "key": 3714,
+        "name": "Varsity View Drive",
+        "type": "Drive"
+      },
+      "centre": {
+        "utm": {
+          "zone": "14U",
+          "x": 625160,
+          "y": 5525449
+        },
+        "geographic": {
+          "latitude": "49.86836",
+          "longitude": "-97.2583"
+        }
+      }
+    },
+    "route-schedules": [
+      {
+        "route": {
+          "key": 79,
+          "number": 79,
+          "name": "Route 79 Charleswood",
+          "customer-type": "regular",
+          "coverage": "regular"
+        },
+        "scheduled-stops": [
+          {
+            "key": "7243718-26",
+            "times": {
+              "arrival": {
+                "scheduled": "2016-03-26T17:57:18",
+                "estimated": "2016-03-26T17:57:18"
+              },
+              "departure": {
+                "scheduled": "2016-03-26T17:57:18",
+                "estimated": "2016-03-26T17:57:18"
+              }
+            },
+            "variant": {
+              "key": "79-1-K",
+              "name": "Charleswood to Polo Park via Kenaston"
+            },
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            }
+          },
+          {
+            "key": "7243719-26",
+            "times": {
+              "arrival": {
+                "scheduled": "2016-03-26T18:27:18",
+                "estimated": "2016-03-26T18:27:18"
+              },
+              "departure": {
+                "scheduled": "2016-03-26T18:27:18",
+                "estimated": "2016-03-26T18:27:18"
+              }
+            },
+            "variant": {
+              "key": "79-1-K",
+              "name": "Charleswood to Polo Park via Kenaston"
+            },
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            }
+          },
+          {
+            "key": "7243656-26",
+            "times": {
+              "arrival": {
+                "scheduled": "2016-03-26T18:54:53",
+                "estimated": "2016-03-26T18:54:53"
+              },
+              "departure": {
+                "scheduled": "2016-03-26T18:54:53",
+                "estimated": "2016-03-26T18:54:53"
+              }
+            },
+            "variant": {
+              "key": "79-1-K",
+              "name": "Charleswood to Polo Park via Kenaston"
+            },
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            }
+          },
+          {
+            "key": "7243657-26",
+            "times": {
+              "arrival": {
+                "scheduled": "2016-03-26T19:23:53",
+                "estimated": "2016-03-26T19:23:53"
+              },
+              "departure": {
+                "scheduled": "2016-03-26T19:23:53",
+                "estimated": "2016-03-26T19:23:53"
+              }
+            },
+            "variant": {
+              "key": "79-1-K",
+              "name": "Charleswood to Polo Park via Kenaston"
+            },
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "query-time": "2016-03-26T17:44:40"
+}
