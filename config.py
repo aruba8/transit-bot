@@ -1,7 +1,7 @@
 import os
 from configparser import ConfigParser
 
-env = os.getenv('bot.environ')
+env = os.getenv('BOT_ENVIRON')
 
 api_url = 'http://api.winnipegtransit.com/v2/'
 api_key = 'test-api-key'
