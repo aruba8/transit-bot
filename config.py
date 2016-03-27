@@ -16,5 +16,4 @@ if env != 'test':
     api_key = config_parser.get("secret", "api-key")
     bot_token = config_parser.get("secret", "bot-token")
 
-
 bot_api_url = 'https://api.telegram.org/bot' + bot_token + '/'
