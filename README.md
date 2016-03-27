@@ -5,5 +5,5 @@
 api.ini file required in the root of project with following content:
     
     [secret]
-    api-key: [transit api key]
-    bot-token: [your telegram bot token]
+    api-key: <transit api key>
+    bot-token: <your telegram bot token>
