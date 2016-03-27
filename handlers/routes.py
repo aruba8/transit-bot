@@ -16,7 +16,6 @@ class RoutesHandler(BaseHandler):
     def get_routs_by_stop_number(self, stop_number):
         params = self._build_params(**{'stop': stop_number})
         r = requests.get(self.api_url + self.resource, params=params)
-        logger.info(r.url)
         return r.text
 
     def _build_url(self):

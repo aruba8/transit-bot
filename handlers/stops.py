@@ -19,7 +19,6 @@ class StopsHandler(BaseHandler):
             **{'start': start, 'end': end, 'route': route, 'max-results-per-route': max_results_per_route})
         url = self._build_schedule_url(stop_number)
         rj = requests.get(url, params=params)
-        logger.info(rj.url)
         return rj.text
 
     def _build_schedule_url(self, stop_number):
