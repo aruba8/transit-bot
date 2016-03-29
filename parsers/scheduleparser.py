@@ -9,6 +9,11 @@ class ScheduleParser:
             raise ScheduleParserException('src_json is not a valid json')
 
         self.src_json = src_json
+        self._query_time_string = self.src_json['query-time']
+        self.query_time = datetime.datetime.strptime(self._query_time_string, '%Y-%m-%dT%H:%M:%S')
+        self.routes_list = self.get_routes()
+        self.buses = self.get_scheduled_buses(self.routes_list)
+        self.sorted_buses = self.sort_buses_by_estimated_arrival(self.buses)
 
     def get_routes(self):
         routes_list = self.src_json['stop-schedule']['route-schedules']
@@ -34,14 +39,15 @@ class ScheduleParser:
 
 
 class ScheduleMessage:
-    def __init__(self, bus_number, bus_name, estimated_arrival_time_string):
+    def __init__(self, bus_number, bus_name, estimated_arrival_time_string, query_time):
+        self._query_time = query_time
         self.bus_number = bus_number
         self.bus_name = bus_name
         self.estimated_arrival_time = datetime.datetime.strptime(estimated_arrival_time_string, '%Y-%m-%dT%H:%M:%S')
 
     def get_time_before_arrive(self):
-        now = datetime.datetime.now()
-        time_diff = self.estimated_arrival_time - now
+        query_time = self._query_time
+        time_diff = self.estimated_arrival_time - query_time
         return round(time_diff.seconds / 60)
 
     def get_formatted_arrival_time(self):

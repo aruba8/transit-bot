@@ -1,6 +1,3 @@
-# !/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
 from telegram import Updater
 import logging
 from config import bot_token
@@ -49,16 +46,15 @@ def schedule_command(bot, update, args):
     parser = ScheduleParser(jobj)
     message_tmpl = Template(filename='templates/schedule.txt')
 
-    _routes = parser.get_routes()
-    buses = parser.get_scheduled_buses(_routes)
-    sorted_buses = parser.sort_buses_by_estimated_arrival(buses)
+    sorted_buses = parser.sorted_buses
     messages = []
     for bus in sorted_buses[:5]:
         messages.append(ScheduleMessage(bus_name=bus['info']['route_name'],
                                         bus_number=bus['info']['route_number'],
-                                        estimated_arrival_time_string=bus['times']['arrival']['estimated']))
-    message = message_tmpl.render(messages=messages)
-    bot.sendMessage(chat_id, text=message)
+                                        estimated_arrival_time_string=bus['times']['arrival']['estimated'],
+                                        query_time=parser.query_time))
+    text = message_tmpl.render(messages=messages)
+    bot.sendMessage(chat_id, text=text)
 
 
 def routes(bot, update, args):

@@ -43,15 +43,17 @@ class ScheduleParserTest(TestCase):
 
 
 from parsers.scheduleparser import ScheduleMessage
-
+import datetime
 
 class ScheduleMessageTest(TestCase):
     def setUp(self):
-        self.message = ScheduleMessage(123, 'Test bus name', '2016-03-26T17:57:18')
+        self.now = datetime.datetime.strptime('2016-03-26T16:22:18', '%Y-%m-%dT%H:%M:%S')
+        self.message = ScheduleMessage(123, 'Test bus name', '2016-03-26T17:57:18', self.now)
 
     def test_get_formatted_arrival_time(self):
         self.assertEqual(self.message.bus_name, 'Test bus name')
         self.assertEqual(self.message.bus_number, 123)
+        self.assertEqual(self.message.get_time_before_arrive(), 95)
         self.assertEqual(self.message.get_formatted_arrival_time(), '05:57 PM')
 
 
