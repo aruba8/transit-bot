@@ -1,7 +1,10 @@
+""" contains parsers for schedule json"""
+
 import datetime
 
 
 class ScheduleParser:
+    """ ScheduleParser parse json returned by transit API"""
     def __init__(self, src_json):
         if src_json is None or src_json == '':
             raise ScheduleParserException('src_json is None or empty')
@@ -22,10 +25,11 @@ class ScheduleParser:
     def get_scheduled_buses(self, routes_list):
         buses = []
         for sch_stop in routes_list:
-            buses = sch_stop['scheduled-stops']
+            stop_buses = sch_stop['scheduled-stops']
             bus_info = self.get_route_info(sch_stop)
-            for bus in buses:
+            for bus in stop_buses:
                 bus['info'] = bus_info
+                buses.append(bus)
         return buses
 
     def sort_buses_by_estimated_arrival(self, buses):
@@ -43,7 +47,8 @@ class ScheduleMessage:
         self._query_time = query_time
         self.bus_number = bus_number
         self.bus_name = bus_name
-        self.estimated_arrival_time = datetime.datetime.strptime(estimated_arrival_time_string, '%Y-%m-%dT%H:%M:%S')
+        self.estimated_arrival_time = datetime.datetime.strptime(
+            estimated_arrival_time_string, '%Y-%m-%dT%H:%M:%S')
 
     def get_time_before_arrive(self):
         query_time = self._query_time

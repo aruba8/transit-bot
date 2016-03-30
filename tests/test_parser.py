@@ -1,6 +1,8 @@
-from unittest import TestCase
-from parsers.scheduleparser import ScheduleParser, ScheduleParserException
+import datetime
 import json
+from unittest import TestCase
+
+from parsers.scheduleparser import ScheduleParser, ScheduleParserException
 
 
 class ScheduleParserTest(TestCase):
@@ -8,6 +10,9 @@ class ScheduleParserTest(TestCase):
         with open('tests/testdata/schedule.json') as json_src:
             self.schedule_json = json.load(json_src)
         self.schedule_parser = ScheduleParser(self.schedule_json)
+
+        with open('tests/testdata/schedule2.json') as json_src:
+            self.schedule_json2 = json.load(json_src)
 
     def testExceptionNone(self):
         try:
@@ -41,9 +46,20 @@ class ScheduleParserTest(TestCase):
         self.assertEqual(sch_buses[0]['info']['route_number'], 79)
         self.assertEqual(sch_buses[0]['info']['route_name'], 'Route 79 Charleswood')
 
+    def test_sorted_buses(self):
+        parser = ScheduleParser(self.schedule_json2)
+        sorted_buses = parser.sorted_buses
+        for i in range(len(sorted_buses)):
+            if i < len(sorted_buses) - 1:
+                bus1 = sorted_buses[i]
+                bus2 = sorted_buses[i + 1]
+                bus1_arr_time = datetime.datetime.strptime(bus1['times']['arrival']['estimated'], '%Y-%m-%dT%H:%M:%S')
+                bus2_arr_time = datetime.datetime.strptime(bus2['times']['arrival']['estimated'], '%Y-%m-%dT%H:%M:%S')
+                self.assertTrue(bus1_arr_time < bus2_arr_time)
+
 
 from parsers.scheduleparser import ScheduleMessage
-import datetime
+
 
 class ScheduleMessageTest(TestCase):
     def setUp(self):
@@ -55,6 +71,3 @@ class ScheduleMessageTest(TestCase):
         self.assertEqual(self.message.bus_number, 123)
         self.assertEqual(self.message.get_time_before_arrive(), 95)
         self.assertEqual(self.message.get_formatted_arrival_time(), '05:57 PM')
-
-
-

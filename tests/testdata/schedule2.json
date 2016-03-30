@@ -1,0 +1,309 @@
+{
+  "query-time": "2016-03-29T08:30:24",
+  "stop-schedule": {
+    "route-schedules": [
+      {
+        "route": {
+          "coverage": "regular",
+          "customer-type": "regular",
+          "key": 78,
+          "name": "Route 78 Crosstown West",
+          "number": 78
+        },
+        "scheduled-stops": [
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342104-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T08:42:53",
+                "scheduled": "2016-03-29T08:42:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T08:42:53",
+                "scheduled": "2016-03-29T08:42:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-C",
+              "name": "Crosstown West to Polo Park via Cambridge"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342178-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T08:45:53",
+                "scheduled": "2016-03-29T08:45:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T08:45:53",
+                "scheduled": "2016-03-29T08:45:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-K",
+              "name": "Crosstown West to Polo Park via Kenaston"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342124-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T09:05:53",
+                "scheduled": "2016-03-29T09:05:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T09:05:53",
+                "scheduled": "2016-03-29T09:05:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-C",
+              "name": "Crosstown West to Polo Park via Cambridge"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342238-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T09:06:53",
+                "scheduled": "2016-03-29T09:06:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T09:06:53",
+                "scheduled": "2016-03-29T09:06:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-K",
+              "name": "Crosstown West to Polo Park via Kenaston"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342170-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T09:27:53",
+                "scheduled": "2016-03-29T09:27:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T09:27:53",
+                "scheduled": "2016-03-29T09:27:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-C",
+              "name": "Crosstown West to Polo Park via Cambridge"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342240-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T09:29:53",
+                "scheduled": "2016-03-29T09:29:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T09:29:53",
+                "scheduled": "2016-03-29T09:29:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-K",
+              "name": "Crosstown West to Polo Park via Kenaston"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342227-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T09:46:53",
+                "scheduled": "2016-03-29T09:46:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T09:46:53",
+                "scheduled": "2016-03-29T09:46:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-C",
+              "name": "Crosstown West to Polo Park via Cambridge"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342195-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T09:57:53",
+                "scheduled": "2016-03-29T09:57:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T09:57:53",
+                "scheduled": "2016-03-29T09:57:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-K",
+              "name": "Crosstown West to Polo Park via Kenaston"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7342184-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T10:28:53",
+                "scheduled": "2016-03-29T10:28:53"
+              },
+              "departure": {
+                "estimated": "2016-03-29T10:28:53",
+                "scheduled": "2016-03-29T10:28:53"
+              }
+            },
+            "variant": {
+              "key": "78-1-C",
+              "name": "Crosstown West to Polo Park via Cambridge"
+            }
+          }
+        ]
+      },
+      {
+        "route": {
+          "coverage": "regular",
+          "customer-type": "regular",
+          "key": 51,
+          "name": "Route 51 St. Vital Centre - University of Manitoba",
+          "number": 51
+        },
+        "scheduled-stops": [
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7302471-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T08:43:45",
+                "scheduled": "2016-03-29T08:43:45"
+              },
+              "departure": {
+                "estimated": "2016-03-29T08:43:45",
+                "scheduled": "2016-03-29T08:43:45"
+              }
+            },
+            "variant": {
+              "key": "51-1-S",
+              "name": "to St. Vital Centre"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7302472-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T09:22:45",
+                "scheduled": "2016-03-29T09:22:45"
+              },
+              "departure": {
+                "estimated": "2016-03-29T09:22:45",
+                "scheduled": "2016-03-29T09:22:45"
+              }
+            },
+            "variant": {
+              "key": "51-1-S",
+              "name": "to St. Vital Centre"
+            }
+          },
+          {
+            "bus": {
+              "bike-rack": "false",
+              "easy-access": "true"
+            },
+            "key": "7302473-6",
+            "times": {
+              "arrival": {
+                "estimated": "2016-03-29T10:02:45",
+                "scheduled": "2016-03-29T10:02:45"
+              },
+              "departure": {
+                "estimated": "2016-03-29T10:02:45",
+                "scheduled": "2016-03-29T10:02:45"
+              }
+            },
+            "variant": {
+              "key": "51-1-S",
+              "name": "to St. Vital Centre"
+            }
+          }
+        ]
+      }
+    ],
+    "stop": {
+      "centre": {
+        "geographic": {
+          "latitude": "49.80329",
+          "longitude": "-97.14927"
+        },
+        "utm": {
+          "x": 633173,
+          "y": 5518403,
+          "zone": "14U"
+        }
+      },
+      "cross-street": {
+        "key": 715,
+        "name": "Chancellor Matheson Road",
+        "type": "Road"
+      },
+      "direction": "Northbound",
+      "key": 61120,
+      "name": "Northbound Research at Chancellor Matheson",
+      "number": 61120,
+      "side": "Nearside",
+      "street": {
+        "key": 4145,
+        "name": "Research Road",
+        "type": "Road"
+      }
+    }
+  }
+}
