@@ -2,7 +2,7 @@ import datetime
 import json
 from unittest import TestCase
 
-from parsers.scheduleparser import ScheduleParser, ScheduleParserException
+from app.parsers.scheduleparser import ScheduleParser, ScheduleParserException
 
 
 class ScheduleParserTest(TestCase):
@@ -58,7 +58,7 @@ class ScheduleParserTest(TestCase):
                 self.assertTrue(bus1_arr_time < bus2_arr_time)
 
 
-from parsers.scheduleparser import ScheduleMessage
+from app.parsers.scheduleparser import ScheduleMessage
 
 
 class ScheduleMessageTest(TestCase):

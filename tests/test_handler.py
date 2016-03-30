@@ -1,7 +1,7 @@
-from handlers.stops import StopsHandler
-from handlers.helper import validate_stop_number
-
 import unittest
+
+from app.handlers.helper import validate_stop_number
+from app.handlers.stops import StopsHandler
 
 
 class StopsHandlerTest(unittest.TestCase):

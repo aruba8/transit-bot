@@ -1,5 +1,7 @@
-import requests
 import logging
+
+import requests
+
 from .basehandler import BaseHandler
 
 # Enable logging

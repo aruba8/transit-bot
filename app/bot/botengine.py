@@ -1,12 +1,14 @@
-from telegram import Updater
-import logging
-from config import bot_token
-from handlers.stops import StopsHandler
-from handlers.routes import RoutesHandler
 import json
+import logging
+
 from mako.template import Template
-from parsers.scheduleparser import ScheduleParser, ScheduleMessage
-from handlers.helper import validate_stop_number
+from telegram import Updater
+
+from app.handlers.helper import validate_stop_number
+from app.handlers.routes import RoutesHandler
+from app.handlers.stops import StopsHandler
+from app.parsers.scheduleparser import ScheduleParser, ScheduleMessage
+from config import bot_token
 
 # Enable logging
 logging.basicConfig(
@@ -20,7 +22,7 @@ job_queue = None
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
 def help(bot, update):
-    message_tmpl = Template(filename='templates/help.txt')
+    message_tmpl = Template(filename='app/templates/help.txt')
     bot.sendMessage(update.message.chat_id, text=message_tmpl.render())
 
 
@@ -44,7 +46,7 @@ def schedule_command(bot, update, args):
     jobj = json.loads(resp)
 
     parser = ScheduleParser(jobj)
-    message_tmpl = Template(filename='templates/schedule.txt')
+    message_tmpl = Template(filename='app/templates/schedule.txt')
 
     sorted_buses = parser.sorted_buses
     messages = []
