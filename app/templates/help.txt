@@ -1,7 +1,8 @@
-To get stop schedule use /schedule <stop number> or /sch <stop number> commands
+To get stop schedule use /schedule <stop number> or /s <stop number> commands
 For example:
-/schedule 10555 or /sch 10555
+/schedule 10555 or /s 10555
 
 List of available commands:
 /help
-/schedule
+/schedule or /s
+/info or /i

@@ -7,6 +7,7 @@ from telegram import Updater
 from app.handlers.helper import validate_stop_number
 from app.handlers.routes import RoutesHandler
 from app.handlers.stops import StopsHandler
+from app.parsers.routeparser import RouteParser, RouteMessage
 from app.parsers.scheduleparser import ScheduleParser, ScheduleMessage
 from config import bot_token
 
@@ -56,10 +57,24 @@ def schedule_command(bot, update, args):
 
 
 def routes(bot, update, args):
+    if len(args) == 0 or not validate_stop_number(args[0]):
+        help(bot, update)
+        return
     chat_id = update.message.chat_id
     stop_number = int(args[0])
     routes_handler = RoutesHandler()
     resp = routes_handler.get_routs_by_stop_number(stop_number)
+    parser = RouteParser(json.loads(resp))
+    routes_list = parser.routes_list
+    messages = []
+    for route in routes_list:
+        messages.append(RouteMessage(route_number=route['number'],
+                                     route_name=route['name'],
+                                     route_coverage=route['coverage']))
+
+    message_tmpl = Template(filename='app/templates/route.txt')
+    text = message_tmpl.render(messages=messages)
+    bot.sendMessage(chat_id, text=text)
 
 
 def error(bot, update, error):
@@ -77,7 +92,8 @@ def main():
     dp.addTelegramCommandHandler("help", help)
     dp.addTelegramCommandHandler("schedule", schedule)
     dp.addTelegramCommandHandler("s", schedule)
-    dp.addTelegramCommandHandler("routes", routes)
+    dp.addTelegramCommandHandler("info", routes)
+    dp.addTelegramCommandHandler("i", routes)
 
     # log all errors
     dp.addErrorHandler(error)

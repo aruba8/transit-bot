@@ -1,0 +1,4 @@
+Routes available on this stop:
+% for message in messages:
+${message.route_name} - coverage: ${message.route_coverage}
+% endfor
