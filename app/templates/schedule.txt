@@ -1,3 +1,3 @@
 % for message in messages:
-Bus ${message.bus_name} will arrive in ${message.get_time_before_arrive()} minutes at ${message.get_formatted_arrival_time()}.
+${message.bus_number} (${message.bus_name}) arrive in ${message.get_time_before_arrive()} min. at ${message.get_formatted_arrival_time()}.
 % endfor

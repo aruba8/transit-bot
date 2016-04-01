@@ -30,10 +30,6 @@ def schedule(bot, update, args):
     schedule_command(bot, update, args)
 
 
-def sch(bot, update, args):
-    schedule_command(bot, update, args)
-
-
 def schedule_command(bot, update, args):
     if len(args) == 0 or not validate_stop_number(args[0]):
         help(bot, update)
@@ -80,7 +76,7 @@ def main():
     dp = updater.dispatcher
     dp.addTelegramCommandHandler("help", help)
     dp.addTelegramCommandHandler("schedule", schedule)
-    dp.addTelegramCommandHandler("sch", schedule)
+    dp.addTelegramCommandHandler("s", schedule)
     dp.addTelegramCommandHandler("routes", routes)
 
     # log all errors
