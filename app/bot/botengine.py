@@ -22,7 +22,7 @@ job_queue = None
 
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
-def help(bot, update):
+def help_func(bot, update):
     message_tmpl = Template(filename='app/templates/help.txt')
     bot.sendMessage(update.message.chat_id, text=message_tmpl.render())
 
@@ -33,7 +33,7 @@ def schedule(bot, update, args):
 
 def schedule_command(bot, update, args):
     if len(args) == 0 or not validate_stop_number(args[0]):
-        help(bot, update)
+        help_func(bot, update)
         return
 
     chat_id = update.message.chat_id
@@ -58,7 +58,7 @@ def schedule_command(bot, update, args):
 
 def routes(bot, update, args):
     if len(args) == 0 or not validate_stop_number(args[0]):
-        help(bot, update)
+        help_func(bot, update)
         return
     chat_id = update.message.chat_id
     stop_number = int(args[0])
@@ -89,7 +89,7 @@ def main():
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
-    dp.addTelegramCommandHandler("help", help)
+    dp.addTelegramCommandHandler("help", help_func)
     dp.addTelegramCommandHandler("schedule", schedule)
     dp.addTelegramCommandHandler("s", schedule)
     dp.addTelegramCommandHandler("info", routes)

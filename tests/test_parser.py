@@ -71,3 +71,20 @@ class ScheduleMessageTest(TestCase):
         self.assertEqual(self.message.bus_number, 123)
         self.assertEqual(self.message.get_time_before_arrive(), 95)
         self.assertEqual(self.message.get_formatted_arrival_time(), '05:57 PM')
+
+
+from  app.parsers.routeparser import RouteParser
+
+
+class RouteParserTest(TestCase):
+    def setUp(self):
+        with open('tests/testdata/routes.json') as json_src:
+            self.route_json = json.load(json_src)
+        self.route_parser = RouteParser(self.route_json)
+
+    def test_routes(self):
+        routes = self.route_parser.get_routes()
+        self.assertEqual(len(routes), 4)
+
+    def test_query_time(self):
+        self.assertEqual(self.route_parser.query_time, datetime.datetime(2016, 4, 3, 13, 31, 35))
