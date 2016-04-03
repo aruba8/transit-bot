@@ -5,7 +5,7 @@ class RouteParser:
     """ RouteParser to parse json """
 
     def __init__(self, src_json):
-        if src_json == None or src_json == '':
+        if src_json is None or src_json == '':
             raise RouteParserException('src_json is None or empty')
         if type(src_json) is not dict:
             raise RouteParserException('src_json is not a valid json')
