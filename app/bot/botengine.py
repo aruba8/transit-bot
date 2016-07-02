@@ -2,23 +2,21 @@ import json
 import logging
 
 from mako.template import Template
-from telegram import Updater
+from telegram import ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardHide
+from telegram.ext import Updater
+from telegram.ext.callbackqueryhandler import CallbackQueryHandler
+from telegram.ext.commandhandler import CommandHandler
+from telegram.ext.messagehandler import Filters, MessageHandler
 
 from app.handlers.helper import validate_stop_number
-from app.handlers.routes import RoutesHandler
 from app.handlers.stops import StopsHandler
-from app.parsers.routeparser import RouteParser, RouteMessage
-from app.parsers.scheduleparser import ScheduleParser, ScheduleMessage
+from app.services.services import StopService, RouteService
 from config import bot_token
 
 # Enable logging
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-job_queue = None
-
 
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
@@ -32,46 +30,27 @@ def schedule(bot, update, args):
 
 
 def schedule_command(bot, update, args):
+    bot.sendChatAction(chat_id=update.message.chat_id, action=ChatAction.TYPING)
     if len(args) == 0 or not validate_stop_number(args[0]):
         help_func(bot, update)
         return
-
     chat_id = update.message.chat_id
     stop_number = int(args[0])
-    stop = StopsHandler()
-    resp = stop.get_schedule_by_stop_number(stop_number, None, None, None, None)
-    jobj = json.loads(resp)
-
-    parser = ScheduleParser(jobj)
+    stop_service = StopService()
     message_tmpl = Template(filename='app/templates/schedule.txt')
-
-    sorted_buses = parser.sorted_buses
-    messages = []
-    for bus in sorted_buses[:5]:
-        messages.append(ScheduleMessage(bus_name=bus['info']['route_name'],
-                                        bus_number=bus['info']['route_number'],
-                                        estimated_arrival_time_string=bus['times']['arrival']['estimated'],
-                                        query_time=parser.query_time))
-    text = message_tmpl.render(messages=messages)
+    text = message_tmpl.render(messages=stop_service.get_messages_by_stop_number(stop_number))
     bot.sendMessage(chat_id, text=text)
 
 
 def routes(bot, update, args):
+    bot.sendChatAction(chat_id=update.message.chat_id, action=ChatAction.TYPING)
     if len(args) == 0 or not validate_stop_number(args[0]):
         help_func(bot, update)
         return
     chat_id = update.message.chat_id
     stop_number = int(args[0])
-    routes_handler = RoutesHandler()
-    resp = routes_handler.get_routs_by_stop_number(stop_number)
-    parser = RouteParser(json.loads(resp))
-    routes_list = parser.routes_list
-    messages = []
-    for route in routes_list:
-        messages.append(RouteMessage(route_number=route['number'],
-                                     route_name=route['name'],
-                                     route_coverage=route['coverage']))
-
+    stop_service = RouteService()
+    messages = stop_service.get_route_messages_by_stop_number(stop_number)
     message_tmpl = Template(filename='app/templates/route.txt')
     text = message_tmpl.render(messages=messages)
     bot.sendMessage(chat_id, text=text)
@@ -81,22 +60,79 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 
-def main():
-    global job_queue
+def echo(bot, update):
+    stop_number = update.message.text
+    if validate_stop_number(stop_number):
+        stop_handler = StopsHandler()
+        resp = stop_handler.get_schedule(stop_number, None, None, None, None)
+        if resp == 'Stop Schedule Not Found':
+            bot.sendMessage(chat_id=update.message.chat_id, text='Stop Schedule Not Found')
+            return
+        jobj = json.loads(resp)
+        stop_name = jobj['stop-schedule']['stop']['name']
+        custom_keyboard = [[InlineKeyboardButton(text='info', callback_data='info|' + stop_number),
+                            InlineKeyboardButton(text='schedule', callback_data='schedule|' + stop_number)]]
+        reply_markup = InlineKeyboardMarkup(inline_keyboard=custom_keyboard)
+        bot.sendMessage(chat_id=update.message.chat_id, text='Stop #' + stop_number + ' @ ' + stop_name,
+                        reply_markup=reply_markup)
 
+
+def answer_query(bot, update):
+    query = update.callback_query
+    chat_id = query.message.chat_id
+    parts = dict(enumerate(query.data.split('|', 1)))
+    answer_type = parts[0]
+    stop_number = parts.get(1)
+    stop_service = StopService()
+    route_service = RouteService()
+    if answer_type == 'info':
+        messages = route_service.get_route_messages_by_stop_number(stop_number)
+        if len(messages) == 0:
+            bot.sendMessage(chat_id=chat_id, text='No info for today')
+            return
+        message_tmpl = Template(filename='app/templates/route.txt')
+        text = message_tmpl.render(messages=messages)
+        bot.sendMessage(chat_id=chat_id, text=text)
+    if answer_type == 'schedule':
+        messages = stop_service.get_messages_by_stop_number(stop_number)
+        if len(messages) == 0:
+            bot.sendMessage(chat_id=chat_id, text='No schedule for today')
+            return
+        message_tmpl = Template(filename='app/templates/schedule.txt')
+        text = message_tmpl.render(messages=messages)
+        bot.sendMessage(chat_id=chat_id, text=text)
+
+
+def unknown(bot, update):
+    bot.sendChatAction(chat_id=update.message.chat_id, action=ChatAction.TYPING)
+    reply_markup = ReplyKeyboardHide()
+    bot.sendMessage(chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.",
+                    reply_markup=reply_markup)
+
+
+def main():
     updater = Updater(bot_token)
-    job_queue = updater.job_queue
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
-    dp.addTelegramCommandHandler("help", help_func)
-    dp.addTelegramCommandHandler("schedule", schedule)
-    dp.addTelegramCommandHandler("s", schedule)
-    dp.addTelegramCommandHandler("info", routes)
-    dp.addTelegramCommandHandler("i", routes)
+
+    unknown_handler = MessageHandler([Filters.command], unknown)
+    echo_handler = MessageHandler([Filters.text], echo)
+    help_handler = CommandHandler('help', help_func)
+    schedule_handler = CommandHandler("schedule", schedule)
+    short_schedule_handler = CommandHandler("s", schedule, pass_args=True)
+    routes_handler = CommandHandler("i", routes, pass_args=True)
+
+    dp.add_handler(echo_handler)
+    dp.add_handler(help_handler)
+    dp.add_handler(schedule_handler)
+    dp.add_handler(short_schedule_handler)
+    dp.add_handler(routes_handler)
+    dp.add_handler(unknown_handler)
+    dp.add_handler(CallbackQueryHandler(answer_query))
 
     # log all errors
-    dp.addErrorHandler(error)
+    dp.add_error_handler(error)
 
     # Start the Bot
     updater.start_polling()

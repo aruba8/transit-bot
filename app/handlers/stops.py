@@ -16,7 +16,7 @@ class StopsHandler(BaseHandler):
     pre_resource = 'stops/'
     post_json_resource = '/schedule.json'
 
-    def get_schedule_by_stop_number(self, stop_number, start, end, route, max_results_per_route=2):
+    def get_schedule(self, stop_number, start, end, route, max_results_per_route=2):
         params = self._build_params(
             **{'start': start, 'end': end, 'route': route, 'max-results-per-route': max_results_per_route})
         url = self._build_schedule_url(stop_number)
