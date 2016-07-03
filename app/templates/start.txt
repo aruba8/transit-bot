@@ -1,0 +1,1 @@
+Hi! This is Winnipeg's transit bot. Start with sending me stop's number. If you need a help, send /help command.

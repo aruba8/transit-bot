@@ -1,4 +1,3 @@
-import json
 import logging
 
 from mako.template import Template
@@ -9,7 +8,6 @@ from telegram.ext.commandhandler import CommandHandler
 from telegram.ext.messagehandler import Filters, MessageHandler
 
 from app.handlers.helper import validate_stop_number
-from app.handlers.stops import StopsHandler
 from app.services.services import StopService, RouteService
 from config import bot_token
 
@@ -18,10 +16,16 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
 def help_func(bot, update):
     message_tmpl = Template(filename='app/templates/help.txt')
+    bot.sendMessage(update.message.chat_id, text=message_tmpl.render())
+
+
+def start_command(bot, update):
+    message_tmpl = Template(filename='app/templates/start.txt')
     bot.sendMessage(update.message.chat_id, text=message_tmpl.render())
 
 
@@ -63,23 +67,26 @@ def error(bot, update, error):
 def echo(bot, update):
     stop_number = update.message.text
     if validate_stop_number(stop_number):
-        stop_handler = StopsHandler()
-        resp = stop_handler.get_schedule(stop_number, None, None, None, None)
-        if resp == 'Stop Schedule Not Found':
-            bot.sendMessage(chat_id=update.message.chat_id, text='Stop Schedule Not Found')
+        stop_service = StopService()
+        stop_name = stop_service.get_stop_name(stop_number)
+        if stop_name is None:
+            bot.sendMessage(chat_id=update.message.chat_id, text='Stop #' + stop_number + ' not found')
             return
-        jobj = json.loads(resp)
-        stop_name = jobj['stop-schedule']['stop']['name']
         custom_keyboard = [[InlineKeyboardButton(text='info', callback_data='info|' + stop_number),
                             InlineKeyboardButton(text='schedule', callback_data='schedule|' + stop_number)]]
         reply_markup = InlineKeyboardMarkup(inline_keyboard=custom_keyboard)
         bot.sendMessage(chat_id=update.message.chat_id, text='Stop #' + stop_number + ' @ ' + stop_name,
+                        reply_markup=reply_markup)
+    else:
+        reply_markup = ReplyKeyboardHide()
+        bot.sendMessage(chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.",
                         reply_markup=reply_markup)
 
 
 def answer_query(bot, update):
     query = update.callback_query
     chat_id = query.message.chat_id
+    bot.sendChatAction(chat_id=chat_id, action=ChatAction.TYPING)
     parts = dict(enumerate(query.data.split('|', 1)))
     answer_type = parts[0]
     stop_number = parts.get(1)
@@ -123,6 +130,7 @@ def main():
     short_schedule_handler = CommandHandler("s", schedule, pass_args=True)
     routes_handler = CommandHandler("i", routes, pass_args=True)
 
+    dp.add_handler(CommandHandler('start', start_command))
     dp.add_handler(echo_handler)
     dp.add_handler(help_handler)
     dp.add_handler(schedule_handler)

@@ -25,6 +25,8 @@ class StopService:
 
     def get_stop_name(self, stop_number):
         resp = self.stop_handler.get_schedule(stop_number, None, None, None, None)
+        if resp == 'Stop Schedule Not Found':
+            return None
         json_object = json.loads(resp)
         stop_name = json_object['stop-schedule']['stop']['name']
         return stop_name
