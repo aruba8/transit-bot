@@ -5,6 +5,7 @@ import datetime
 
 class ScheduleParser:
     """ ScheduleParser parse json returned by transit API"""
+
     def __init__(self, src_json):
         if src_json is None or src_json == '':
             raise ScheduleParserException('src_json is None or empty')
@@ -16,7 +17,8 @@ class ScheduleParser:
         self.query_time = datetime.datetime.strptime(self._query_time_string, '%Y-%m-%dT%H:%M:%S')
         self.routes_list = self.get_routes()
         self.buses = self.get_scheduled_buses(self.routes_list)
-        self.sorted_buses = self.sort_buses_by_estimated_arrival(self.buses)
+        self.sorted_arrival_buses = self.sort_buses_by(self.buses, 'arrival')
+        self.sorted_depart_buses = self.sort_buses_by(self.buses, 'departure')
 
     def get_routes(self):
         routes_list = self.src_json['stop-schedule']['route-schedules']
@@ -32,8 +34,10 @@ class ScheduleParser:
                 buses.append(bus)
         return buses
 
-    def sort_buses_by_estimated_arrival(self, buses):
-        buses.sort(key=lambda x: x['times']['arrival']['estimated'], reverse=False)
+    def sort_buses_by(self, buses, by):
+        """ by can be 'arrival' or 'departure' """
+        if len(buses) > 0 and buses[0]['times'].get(by):
+            buses.sort(key=lambda x: x['times'][by]['estimated'], reverse=False)
         return buses
 
     def get_route_info(self, route):
@@ -43,20 +47,31 @@ class ScheduleParser:
 
 
 class ScheduleMessage:
-    def __init__(self, bus_number, bus_name, estimated_arrival_time_string, query_time):
+    def __init__(self, bus_number, bus_name, estimated_arrival_time_string, estimated_departure_time_string,
+                 query_time):
         self._query_time = query_time
         self.bus_number = bus_number
         self.bus_name = bus_name
-        self.estimated_arrival_time = datetime.datetime.strptime(
-            estimated_arrival_time_string, '%Y-%m-%dT%H:%M:%S')
+        if estimated_arrival_time_string:
+            self.estimated_arrival_time = datetime.datetime.strptime(estimated_arrival_time_string, '%Y-%m-%dT%H:%M:%S')
+        self.estimated_departure_time = datetime.datetime.strptime(
+            estimated_departure_time_string, '%Y-%m-%dT%H:%M:%S')
 
     def get_time_before_arrive(self):
         query_time = self._query_time
         time_diff = self.estimated_arrival_time - query_time
         return round(time_diff.seconds / 60)
 
+    def get_time_before_depart(self):
+        query_time = self._query_time
+        time_diff = self.estimated_departure_time - query_time
+        return round(time_diff.seconds / 60)
+
     def get_formatted_arrival_time(self):
         return self.estimated_arrival_time.strftime('%I:%M %p')
+
+    def get_formatted_departure_time(self):
+        return self.estimated_departure_time.strftime('%I:%M %p')
 
 
 class ScheduleParserException(Exception):

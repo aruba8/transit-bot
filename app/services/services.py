@@ -14,14 +14,29 @@ class StopService:
         resp = self.stop_handler.get_schedule(stop_number, None, None, None, None)
         jobj = json.loads(resp)
         parser = ScheduleParser(jobj)
-        sorted_buses = parser.sorted_buses
+        sorted_buses = parser.sorted_arrival_buses
         messages = []
         for bus in sorted_buses[:5]:
+            times = bus['times']
+            estimated_arrival_time_string = None
+            if times.get('arrival'):
+                estimated_arrival_time_string = times['arrival']['estimated']
+            estimated_departure_time_string = bus['times']['departure']['estimated']
             messages.append(ScheduleMessage(bus_name=bus['info']['route_name'],
                                             bus_number=bus['info']['route_number'],
-                                            estimated_arrival_time_string=bus['times']['arrival']['estimated'],
+                                            estimated_arrival_time_string=estimated_arrival_time_string,
+                                            estimated_departure_time_string=estimated_departure_time_string,
                                             query_time=parser.query_time))
         return messages
+
+    def is_head_stop(self, stop_number):
+        resp = self.stop_handler.get_schedule(stop_number, None, None, None, None)
+        json_object = json.loads(resp)
+        stop_type = json_object['stop-schedule']['stop']['street']['type']
+        if stop_type == 'Terminal' or stop_type == 'Loop':
+            return True
+        else:
+            return False
 
     def get_stop_name(self, stop_number):
         resp = self.stop_handler.get_schedule(stop_number, None, None, None, None)

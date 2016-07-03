@@ -41,7 +41,7 @@ def schedule_command(bot, update, args):
     chat_id = update.message.chat_id
     stop_number = int(args[0])
     stop_service = StopService()
-    message_tmpl = Template(filename='app/templates/schedule.txt')
+    message_tmpl = Template(filename='app/templates/schedule_arrival.txt')
     text = message_tmpl.render(messages=stop_service.get_messages_by_stop_number(stop_number))
     bot.sendMessage(chat_id, text=text)
 
@@ -102,12 +102,18 @@ def answer_query(bot, update):
         bot.sendMessage(chat_id=chat_id, text=text)
     if answer_type == 'schedule':
         messages = stop_service.get_messages_by_stop_number(stop_number)
+        is_head = stop_service.is_head_stop(stop_number)
         if len(messages) == 0:
             bot.sendMessage(chat_id=chat_id, text='No schedule for today')
             return
-        message_tmpl = Template(filename='app/templates/schedule.txt')
-        text = message_tmpl.render(messages=messages)
-        bot.sendMessage(chat_id=chat_id, text=text)
+        if is_head:
+            message_tmpl = Template(filename='app/templates/schedule_depart.txt')
+            text = message_tmpl.render(messages=messages)
+            bot.sendMessage(chat_id=chat_id, text=text)
+        else:
+            message_tmpl = Template(filename='app/templates/schedule_arrival.txt')
+            text = message_tmpl.render(messages=messages)
+            bot.sendMessage(chat_id=chat_id, text=text)
 
 
 def unknown(bot, update):

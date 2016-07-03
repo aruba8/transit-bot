@@ -1,0 +1,3 @@
+% for message in messages:
+${message.bus_number} (${message.bus_name}) depart in ${message.get_time_before_depart()} min. at ${message.get_formatted_departure_time()}.
+% endfor

@@ -48,7 +48,7 @@ class ScheduleParserTest(TestCase):
 
     def test_sorted_buses(self):
         parser = ScheduleParser(self.schedule_json2)
-        sorted_buses = parser.sorted_buses
+        sorted_buses = parser.sorted_arrival_buses
         for i in range(len(sorted_buses)):
             if i < len(sorted_buses) - 1:
                 bus1 = sorted_buses[i]
@@ -64,7 +64,7 @@ from app.parsers.scheduleparser import ScheduleMessage
 class ScheduleMessageTest(TestCase):
     def setUp(self):
         self.now = datetime.datetime.strptime('2016-03-26T16:22:18', '%Y-%m-%dT%H:%M:%S')
-        self.message = ScheduleMessage(123, 'Test bus name', '2016-03-26T17:57:18', self.now)
+        self.message = ScheduleMessage(123, 'Test bus name', '2016-03-26T17:57:18', '2016-03-26T17:57:18', self.now)
 
     def test_get_formatted_arrival_time(self):
         self.assertEqual(self.message.bus_name, 'Test bus name')
